@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>DOCXTemplater</title>
+        <script src="./docxtemplater/docxgen.js"></script>
+        <script src="../../FileSaver.js/FileSaver.min.js"></script>
+    </head>
+    <body>
+    <textarea style="width: 500px; height: 300px; padding: 10px;" readonly>
+loadFile("tagExample.docx",function(err,content){
+var doc = new Docxgen(content);
+doc.setData({
+    "first_name":"Dmitry",
+    "last_name":"Radyno",
+    "phone":"012345678",
+    "description":"my.first.website.com"
+});
+doc.render();
+var out = doc.getZip().generate({ type:"blob" });
+
+// saving file using FileSaver.js
+saveAs(out, "docxtemplater_demo_result.docx");
+});
+    </textarea>
+    <br/>
+    <input type="button" id="generate" value="Generate DOCX" />
+    <script>
+        var loadFile=function(url,callback){
+            var xhrDoc= new XMLHttpRequest();
+            xhrDoc.open('GET', url , true);
+            if (xhrDoc.overrideMimeType) {
+                xhrDoc.overrideMimeType('text/plain; charset=x-user-defined');
+            }
+            xhrDoc.onreadystatechange =function(e) {
+                if (this.readyState == 4) {
+                    if (this.status == 200)
+                        callback(null,this.response);
+                    else
+                        callback(e);
+                }
+            };
+            xhrDoc.send();
+        };
+
+        document.getElementById("generate").addEventListener("click", function() {
+            loadFile("tagExample.docx",function(err,content){
+                var doc = new Docxgen(content);
+                doc.setData({
+                    "first_name":"Dmitry",
+                    "last_name":"Radyno",
+                    "phone":"012345678",
+                    "description":"my.first.website.com"
+                });
+                doc.render();
+                var out = doc.getZip().generate({ type:"blob" });
+
+                // saving file using FileSaver.js
+                saveAs(out, "docxtemplater_demo_result.docx");
+            });
+        }, false);
+    </script>
+    </body>
+</html>
