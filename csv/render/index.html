@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rendering CSV</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            font-family: Verdana;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        table td {
+            border: 1px solid #cccccc;
+            padding: 0px;
+            margin: 0px;
+        }
+        table td.row {
+            width: 30px;
+        }
+        table td.col, table td.row {
+            font-weight: bold;
+            text-align: center;
+        }
+        table td input {
+            width: 100%;
+            height: 30px;
+            border: 0px;
+            margin: 0px;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="../js-xlsx/xlsx.core.min.js"></script>
+    <script src="../../FileSaver.js/FileSaver.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td class="col">&nbsp;</td>
+        <td class="col">A</td>
+        <td class="col">B</td>
+        <td class="col">C</td>
+    </tr>
+    <tr>
+        <td class="row">1</td>
+        <td><input type="text" id="A1" value="Surname" /></td>
+        <td><input type="text" id="B1" value="Name" /></td>
+        <td><input type="text" id="C1" value="Age" /></td>
+    </tr>
+    <tr>
+        <td class="row">2</td>
+        <td><input type="text" id="A2" value="Ivanov" /></td>
+        <td><input type="text" id="B2" value="Ivan" /></td>
+        <td><input type="text" id="C2" value="20" /></td>
+    </tr>
+    <tr>
+        <td class="row">3</td>
+        <td><input type="text" id="A3" value="Petrov" /></td>
+        <td><input type="text" id="B3" value="Petr" /></td>
+        <td><input type="text" id="C3" value="25" /></td>
+    </tr>
+    <tr>
+        <td class="row">4</td>
+        <td><input type="text" id="A4" value="Sergeev" /></td>
+        <td><input type="text" id="B4" value="Serge" /></td>
+        <td><input type="text" id="C4" value="30" /></td>
+    </tr>
+</table>
+<input type="button" id="generate" value="Generate CSV" />
+<script>
+    document.getElementById("generate")
+            .addEventListener("click", generateCSV, false);
+
+    function generateCSV() {
+        var delimiter = ";",
+            data = [[
+                document.getElementById("A1").value,
+                document.getElementById("B1").value,
+                document.getElementById("C1").value
+            ], [
+                document.getElementById("A2").value,
+                document.getElementById("B2").value,
+                document.getElementById("C2").value
+            ], [
+                document.getElementById("A3").value,
+                document.getElementById("B3").value,
+                document.getElementById("C3").value
+            ], [
+                document.getElementById("A4").value,
+                document.getElementById("B4").value,
+                document.getElementById("C4").value
+            ]],
+            row,
+            csv;
+
+        for (row = 0; row < data.length; row++) {
+            data[row] = data[row].join(delimiter);
+        }
+        csv = data.join("\r\n");
+
+        saveAs(new Blob([csv], {type: "text/csv;charset=utf-8"}), "result.csv");
+    }
+</script>
+</body>
+</html>

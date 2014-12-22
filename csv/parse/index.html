@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Parsing CSV</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            font-family: Verdana;
+            margin-top: 10px;
+        }
+        table td {
+            border: 1px solid #cccccc;
+            padding: 4px 10px;
+        }
+    </style>
+</head>
+<body>
+<input id="document" type="file" />
+<div id="output"></div>
+<script>
+    document.getElementById("document")
+            .addEventListener("change", handleFileSelect, false);
+
+    function handleFileSelect(event) {
+        readFileInputEventAsText(event, function(csvText) {
+            var lines = csvText.split("\n"),
+                    line,
+                    delimiter = ";",
+                    row, col, cells, cell,
+                    table = "<table>";
+
+            for (row = 0; row < lines.length; row++) {
+                line = lines[row].trim();
+                if (line !== "") {
+                    cells = line.split(delimiter);
+                    table += "<tr>";
+                    for (col = 0; col < cells.length; col++) {
+                        table += "<td>" + cells[col] + "</td>";
+                    }
+                    table += "</tr>";
+                }
+            }
+            table += "</table>";
+            document.getElementById("output").innerHTML = table;
+        });
+
+    }
+
+    function readFileInputEventAsText(event, callback) {
+        var file = event.target.files[0],
+                reader = new FileReader();
+
+        reader.onload = function(loadEvent) {
+            var arrayBuffer = loadEvent.target.result;
+            callback(arrayBuffer);
+        };
+        reader.readAsText(file);
+    }
+</script>
+</body>
+</html>
