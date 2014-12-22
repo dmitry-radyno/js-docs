@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rendering XLSX - JS-XLSX</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            font-family: Verdana;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        table td {
+            border: 1px solid #cccccc;
+            padding: 0px;
+            margin: 0px;
+        }
+        table td.row {
+            width: 30px;
+        }
+        table td.col, table td.row {
+            font-weight: bold;
+            text-align: center;
+        }
+        table td input {
+            width: 100%;
+            height: 30px;
+            border: 0px;
+            margin: 0px;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="../js-xlsx/xlsx.core.min.js"></script>
+    <script src="../../FileSaver.js/FileSaver.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td class="col">&nbsp;</td>
+        <td class="col">A</td>
+        <td class="col">B</td>
+        <td class="col">C</td>
+    </tr>
+    <tr>
+        <td class="row">1</td>
+        <td><input type="text" id="A1" value="Surname" /></td>
+        <td><input type="text" id="B1" value="Name" /></td>
+        <td><input type="text" id="C1" value="Age" /></td>
+    </tr>
+    <tr>
+        <td class="row">2</td>
+        <td><input type="text" id="A2" value="Ivanov" /></td>
+        <td><input type="text" id="B2" value="Ivan" /></td>
+        <td><input type="text" id="C2" value="20" /></td>
+    </tr>
+    <tr>
+        <td class="row">3</td>
+        <td><input type="text" id="A3" value="Petrov" /></td>
+        <td><input type="text" id="B3" value="Petr" /></td>
+        <td><input type="text" id="C3" value="25" /></td>
+    </tr>
+    <tr>
+        <td class="row">4</td>
+        <td><input type="text" id="A4" value="Sergeev" /></td>
+        <td><input type="text" id="B4" value="Serge" /></td>
+        <td><input type="text" id="C4" value="30" /></td>
+    </tr>
+</table>
+<input type="button" id="generate" value="Generate XLSX" />
+<script>
+    document.getElementById("generate")
+            .addEventListener("click", generateXLSX, false);
+
+    function generateXLSX(event) {
+        var Workbook = function() {
+                if(!(this instanceof Workbook)) return new Workbook();
+                this.SheetNames = [];
+                this.Sheets = {};
+            },
+            s2ab = function(s) {
+                var buf = new ArrayBuffer(s.length);
+                var view = new Uint8Array(buf);
+                for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                return buf;
+            },
+            workbook = new Workbook(),
+            worksheetName = "SheetJS",
+            worksheet = {},
+            range = {
+                s: { c: 0, r: 0},
+                e: { c: 2, r: 3 }
+            },
+            wbout;
+
+        worksheet["!ref"] = XLSX.utils.encode_range(range);
+        worksheet.A1 = { v: document.getElementById("A1").value };
+        worksheet.A2 = { v: document.getElementById("A2").value };
+        worksheet.A3 = { v: document.getElementById("A3").value };
+        worksheet.A4 = { v: document.getElementById("A4").value };
+
+        worksheet.B1 = { v: document.getElementById("B1").value };
+        worksheet.B2 = { v: document.getElementById("B2").value };
+        worksheet.B3 = { v: document.getElementById("B3").value };
+        worksheet.B4 = { v: document.getElementById("B4").value };
+
+        worksheet.C1 = { v: document.getElementById("C1").value };
+        worksheet.C2 = { v: document.getElementById("C2").value };
+        worksheet.C3 = { v: document.getElementById("C3").value };
+        worksheet.C4 = { v: document.getElementById("C4").value };
+
+        /* add worksheet to workbook */
+        workbook.SheetNames.push(worksheetName);
+        workbook.Sheets[worksheetName] = worksheet;
+        wbout = XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: "binary" });
+
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), "test.xlsx");
+    }
+</script>
+</body>
+</html>
