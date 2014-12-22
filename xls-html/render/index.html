@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rendering HTML as XLS</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            font-family: Verdana;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        table td {
+            border: 1px solid #cccccc;
+            padding: 0px;
+            margin: 0px;
+        }
+        table td.row {
+            width: 30px;
+        }
+        table td.col, table td.row {
+            font-weight: bold;
+            text-align: center;
+        }
+        table td input {
+            width: 100%;
+            height: 30px;
+            border: 0px;
+            margin: 0px;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="../../FileSaver.js/FileSaver.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td class="col">&nbsp;</td>
+        <td class="col">A</td>
+        <td class="col">B</td>
+        <td class="col">C</td>
+    </tr>
+    <tr>
+        <td class="row">1</td>
+        <td><input type="text" id="A1" value="Surname" /></td>
+        <td><input type="text" id="B1" value="Name" /></td>
+        <td><input type="text" id="C1" value="Age" /></td>
+    </tr>
+    <tr>
+        <td class="row">2</td>
+        <td><input type="text" id="A2" value="Ivanov" /></td>
+        <td><input type="text" id="B2" value="Ivan" /></td>
+        <td><input type="text" id="C2" value="20" /></td>
+    </tr>
+    <tr>
+        <td class="row">3</td>
+        <td><input type="text" id="A3" value="Petrov" /></td>
+        <td><input type="text" id="B3" value="Petr" /></td>
+        <td><input type="text" id="C3" value="25" /></td>
+    </tr>
+    <tr>
+        <td class="row">4</td>
+        <td><input type="text" id="A4" value="Sergeev" /></td>
+        <td><input type="text" id="B4" value="Serge" /></td>
+        <td><input type="text" id="C4" value="30" /></td>
+    </tr>
+</table>
+<input type="button" id="generate" value="Generate HTML-XLS" />
+<script>
+    document.getElementById("generate")
+            .addEventListener("click", generateHTML, false);
+
+    function generateHTML() {
+            var html = "<!doctype html>\
+<head>\
+    <style>\
+        td {\
+            vertical-align: middle;\
+            text-align: center;\
+            font-family: 'TimesNewRoman';\
+            font-size: 12pt;\
+            border: 0.5pt solid #aaaaaa;\
+        }\
+        .header {\
+            background-color: #dddddd;\
+            height: 30pt;\
+        }\
+        .odd {\
+            background-color: #eeeeee;\
+        }\
+        .even {\
+            background-color: #ffffff;\
+        }\
+    </style>\
+</head>\
+<body>\
+    <table>\
+        <tr>\
+            <td class='header'>" + document.getElementById("A1").value + "</td>\
+            <td class='header'>" + document.getElementById("B1").value + "</td>\
+            <td class='header'>" + document.getElementById("C1").value + "</td>\
+        </tr>\
+        <tr>\
+            <td class='even'>" + document.getElementById("A2").value + "</td>\
+            <td class='even'>" + document.getElementById("B2").value + "</td>\
+            <td class='even'>" + document.getElementById("C2").value + "</td>\
+        </tr>\
+        <tr>\
+            <td class='odd'>" + document.getElementById("A3").value + "</td>\
+            <td class='odd'>" + document.getElementById("B3").value + "</td>\
+            <td class='odd'>" + document.getElementById("C3").value + "</td>\
+        </tr>\
+        <tr>\
+            <td class='even'>" + document.getElementById("A4").value + "</td>\
+            <td class='even'>" + document.getElementById("B4").value + "</td>\
+            <td class='even'>" + document.getElementById("C4").value + "</td>\
+        </tr>\
+    </table>\
+</body>\
+</html>";
+
+        saveAs(new Blob([html], {type: "application/vnd.ms-excel"}), "result.xls");
+    }
+</script>
+</body>
+</html>
