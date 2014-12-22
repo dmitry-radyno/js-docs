@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"> 
-    <title>Parsing XLSX - JS-XLSX</title>
+    <title>Parsing XLS - JS-XLS</title>
     <style>
         table {
             border-collapse: collapse;
@@ -18,7 +18,7 @@
   <body>
     <input id="document" type="file" />
     <div id="output"></div>
-    <script src="../js-xlsx/xlsx.core.min.js"></script>
+    <script src="../js-xls/xls.core.min.js"></script>
     <script>
         document.getElementById("document")
                 .addEventListener("change", handleFileSelect, false);
@@ -26,18 +26,18 @@
         function handleFileSelect(event) {
             readFileInputEventAsBinaryString(event, function(arrayBuffer) {
 
-                var workbook = XLSX.read(arrayBuffer, { type: "binary" });
+                var workbook = XLS.read(arrayBuffer, { type: "binary" });
 
                 var table = "<table>";
                 var sheetName = workbook.SheetNames[0],
                     sheet = workbook.Sheets[sheetName],
-                    range = XLSX.utils.decode_range(sheet["!ref"]),
+                    range = XLS.utils.decode_range(sheet["!ref"]),
                     row, col, cellCoord, cell;
 
                 for (row = range.s.r; row <= range.e.r; row++) {
                     table += "<tr>";
                     for (col = range.s.c; col <= range.e.c; col++) {
-                        cellCoord = XLSX.utils.encode_cell({ r: row, c: col });
+                        cellCoord = XLS.utils.encode_cell({ r: row, c: col });
                         cell = sheet[cellCoord];
                         table += "<td>" + cell.v + "</td>";
                     }
@@ -46,7 +46,6 @@
                 table += "</table>";
                 document.getElementById("output").innerHTML = table;
             });
-
         }
 
         function readFileInputEventAsBinaryString(event, callback) {
